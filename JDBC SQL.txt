@@ -1,0 +1,53 @@
+﻿CREATE DATABASE jdbc_demo
+USE jdbc_demo;
+-- Create the 'places' table --
+CREATE TABLE IF NOT EXISTS places (
+                                      place_id INTEGER(10) NOT NULL,
+                                      village VARCHAR(30),
+                                      cp INTEGER(5),
+                                      location VARCHAR(30),
+                                      PRIMARY KEY (place_id),
+                                      UNIQUE (location)
+);
+-- Create the 'bikes' table --
+CREATE TABLE IF NOT EXISTS bikes (
+                                     bike_id INTEGER(10) NOT NULL,
+                                     bike_model VARCHAR(30),
+                                     place_id INTEGER(10),
+                                     assigned_id INTEGER(10),
+                                     PRIMARY KEY (bike_id),
+                                     FOREIGN KEY (place_id) REFERENCES places (place_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                     UNIQUE (assigned_id)
+);
+-- Create the 'bookings' table --
+CREATE TABLE IF NOT EXISTS bookings (
+                                        bookings_id NUMERIC(10),
+                                        nombre VARCHAR(30),
+                                        surname VARCHAR(30),
+                                        age NUMERIC CHECK (age > 0),
+                                        email VARCHAR(30),
+                                        village VARCHAR(30),
+                                        bike_id INTEGER(10),
+                                        PRIMARY KEY (bookings_id),
+                                        FOREIGN KEY (bike_id) REFERENCES bikes (bike_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                        INDEX idx_bookings_village (village)
+);
+-- Create the 'extra' table --
+CREATE TABLE IF NOT EXISTS extra (
+                                     extra_id INTEGER(10),
+                                     adds VARCHAR(30),
+                                     PRIMARY KEY (extra_id)
+);
+-- Create the 'bikes_extra' table--
+CREATE TABLE IF NOT EXISTS bikes_extra (
+                                           bike_id INTEGER(10),
+                                           extra_id INTEGER(10),
+                                           PRIMARY KEY (bike_id, extra_id),
+                                           FOREIGN KEY (bike_id) REFERENCES bikes (bike_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                           FOREIGN KEY (extra_id) REFERENCES extra (extra_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+SELECT * from places;
+SELECT * FROM bikes;
+SELECT * from bookings;
+SELECT * FROM extra;
+SELECT * FROM bikes_extra;
